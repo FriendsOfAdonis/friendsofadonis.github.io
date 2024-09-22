@@ -32,7 +32,7 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    needs: Build
+    needs: build
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
