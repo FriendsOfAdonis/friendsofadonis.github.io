@@ -21,9 +21,6 @@ jobs:
       - name: Build and export website
         run: |
           npm run export
-      - uses: actions/configure-pages@v1
       - uses: actions/upload-pages-artifact@v1
         with:
           path: ./dist
-      - id: deployment
-        uses: actions/deploy-pages@v1
