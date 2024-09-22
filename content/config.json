@@ -1,21 +1,15 @@
 {
   "links": {
     "home": {
-      "title": "Lucid",
+      "title": "Friends of Adonis",
       "href": "/"
     },
     "github": {
-      "title": "Lucid on Github",
-      "href": "https://github.com/adonisjs/lucid"
+      "title": "Friends of Adonis on Github",
+      "href": "https://github.com/FriendsOfAdonis"
     }
   },
-  "sponsors_sources": [
-  ],
-  "search": {
-    "appId": "LAX13WQLUB",
-    "indexName": "lucid-adonisjs",
-    "apiKey": "2c93ff220c2007473bcf88e4e730199e"
-  },
-  "fileEditBaseUrl": "https://github.com/adonisjs/lucid.adonisjs.com/blob/main",
-  "copyright": "AdonisJS Lucid"
+  "sponsors_sources": [],
+  "fileEditBaseUrl": "https://github.com/FriendsOfAdonis/docs/blob/main",
+  "copyright": "FriendsOfAdonis"
 }

@@ -1,128 +1,38 @@
 [
   {
-    "permalink": "introduction",
+    "permalink": "shopkeeper/introduction",
     "title": "Introduction",
-    "contentPath": "./guides/introduction.md",
-    "category": "Guides"
+    "contentPath": "./shopkeeper/introduction.md",
+    "category": "Shopkeeper"
   },
   {
-    "permalink": "installation",
-    "title": "Installation and Usage",
-    "contentPath": "./guides/installation.md",
-    "category": "Guides"
+    "permalink": "shopkeeper/installation",
+    "title": "Installation",
+    "contentPath": "./shopkeeper/installation.md",
+    "category": "Shopkeeper"
   },
   {
-    "permalink": "debugging",
-    "title": "Debugging",
-    "contentPath": "./guides/debugging.md",
-    "category": "Guides"
+    "permalink": "shopkeeper/quickstart",
+    "title": "Quickstart",
+    "contentPath": "./shopkeeper/quickstart.md",
+    "category": "Shopkeeper"
   },
   {
-    "permalink": "transactions",
-    "title": "Transactions",
-    "contentPath": "./guides/transactions.md",
-    "category": "Guides"
+    "permalink": "shopkeeper/customers",
+    "title": "Customers",
+    "contentPath": "./shopkeeper/customers.md",
+    "category": "Shopkeeper"
   },
   {
-    "permalink": "pagination",
-    "title": "Pagination",
-    "contentPath": "./guides/pagination.md",
-    "category": "Guides"
+    "permalink": "shopkeeper/payment-methods",
+    "title": "Payment Methods",
+    "contentPath": "./shopkeeper/payment_methods.md",
+    "category": "Shopkeeper"
   },
   {
-    "permalink": "seeders",
-    "title": "Database seeders",
-    "contentPath": "./guides/seeders.md",
-    "category": "Guides"
-  },
-  {
-    "permalink": "select-query-builder",
-    "title": "Select query builder",
-    "contentPath": "./query_builders/select.md",
-    "category": "Query builders"
-  },
-  {
-    "permalink": "insert-query-builder",
-    "title": "Insert query builder",
-    "contentPath": "./query_builders/insert.md",
-    "category": "Query builders"
-  },
-  {
-    "permalink": "raw-query-builder",
-    "title": "Raw query builder",
-    "contentPath": "./query_builders/raw.md",
-    "category": "Query builders"
-  },
-  {
-    "permalink": "migrations",
-    "title": "Introduction",
-    "contentPath": "./migrations/introduction.md",
-    "category": "Migrations"
-  },
-  {
-    "permalink": "schema-builder",
-    "title": "Schema builder",
-    "contentPath": "./migrations/schema_builder.md",
-    "category": "Migrations"
-  },
-  {
-    "permalink": "table-builder",
-    "title": "Table builder",
-    "contentPath": "./migrations/table_builder.md",
-    "category": "Migrations"
-  },
-  {
-    "permalink": "models",
-    "title": "Introduction",
-    "contentPath": "./models/introduction.md",
-    "category": "Models"
-  },
-  {
-    "permalink": "crud-operations",
-    "title": "CRUD operations",
-    "contentPath": "./models/crud_operations.md",
-    "category": "Models"
-  },
-  {
-    "permalink": "model-hooks",
-    "title": "Hooks",
-    "contentPath": "./models/hooks.md",
-    "category": "Models"
-  },
-  {
-    "permalink": "model-query-builder",
-    "title": "Query builder",
-    "contentPath": "./models/query_builder.md",
-    "category": "Models"
-  },
-  {
-    "permalink": "model-naming-strategy",
-    "title": "Naming strategy",
-    "contentPath": "./models/naming_strategy.md",
-    "category": "Models"
-  },
-  {
-    "permalink": "model-query-scopes",
-    "title": "Query scopes",
-    "contentPath": "./models/query_scopes.md",
-    "category": "Models"
-  },
-  {
-    "permalink": "serializing-models",
-    "title": "Serializing models",
-    "contentPath": "./models/serializing_models.md",
-    "category": "Models"
-  },
-  {
-    "permalink": "relationships",
-    "title": "Relationships",
-    "contentPath": "./models/relationships.md",
-    "category": "Models"
-  },
-  {
-    "permalink": "model-factories",
-    "title": "Model factories",
-    "contentPath": "./models/model_factories.md",
-    "category": "Models"
+    "permalink": "shopkeeper/subscriptions",
+    "title": "Subscriptions",
+    "contentPath": "./shopkeeper/subscriptions.md",
+    "category": "Shopkeeper"
   }
 ]

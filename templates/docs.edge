@@ -3,17 +3,17 @@
 
   @component('docs::header', siteConfig)
     @slot('logo')
-      @include('partials/logo')
+      Friends of Adonis
     @end
 
     @slot('logoMobile')
-      @include('partials/logo_mobile')
+      Friends of Adonis
     @end
   @end
 
   <section layout-shell>
     @!component('docs::sidebar', {
-      collapsible: false,
+      collapsible: true,
       sections: getSections(collection, entry)
     })
 
