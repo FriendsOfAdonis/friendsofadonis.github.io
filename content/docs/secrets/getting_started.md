@@ -2,19 +2,19 @@
 
 ## Introduction
 
-This `@foadmin/secrets` library allows you to safely store your environment variable files in your repository by bringing two commands `env:encrypt` and `env:decrypt`. It is heavily inspired by the popular framework [Laravel](https://laravel.com/).
+This `@foadonis/secrets` library allows you to safely store your environment variable files in your repository by bringing two commands `env:encrypt` and `env:decrypt`. It is heavily inspired by the popular framework [Laravel](https://laravel.com/).
 
 ## Installation
 
 Install and configure the package using the following command :
 
 ```sh
-node ace add @foadmin/shopkeeper
+node ace add @foadonis/shopkeeper
 ```
 
 :::disclosure{title="See steps performed by the add command"}
 
-1. Installs the `@foadmin/secrets` package using the detected package manager.
+1. Installs the `@foadonis/secrets` package using the detected package manager.
 
 2. Registers the commands inside the `adonisrc.ts` file.
 
@@ -22,7 +22,7 @@ node ace add @foadmin/shopkeeper
     {
       commands: [
         // ...other commands
-        () => import('@foadmin/secrets/commands')
+        () => import('@foadonis/secrets/commands')
       ]
     }
     ```
