@@ -5,7 +5,7 @@
 Install and configure the package using the following command :
 
 ```sh
-node ace add adonis-shopkeeper
+node ace add @foadmin/shopkeeper
 ```
 
 :::disclosure{title="See steps performed by the add command"}
