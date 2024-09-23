@@ -7,3 +7,23 @@ summary: "Adonis Shopkeeper provides an expressive, fluent interface to Stripe's
 Adonis Shopkeeper provides an expressive, fluent interface to Stripe's subscription billing services. It handles almost all of the boilerplate subscription billing code you are dreading writing. In addition to basic subscription management, Shopkeeper can handle coupons, swapping subscription, subscription "quantities", cancellation grace periods, and even generate invoice PDFs.
 
 This library is a port of [Laravel Cashier](https://laravel.com/docs/11.x/billing).
+
+```ts
+export class BillingController {
+
+  async checkout({ auth, request, view }: HttpContext) {
+    const user = auth.getUserOrFail()
+    
+    const checkout = await user
+      .newSubscription()
+      .price('price_tshirt')
+      .quantity(5)
+      .checkout()
+
+    return view.render('pages/checkout', {
+      checkout
+    })
+  }
+
+}
+```
