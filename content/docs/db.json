@@ -36,7 +36,7 @@
     "category": "Shopkeeper"
   },
   {
-    "permalink": "secret/getting-started",
+    "permalink": "secrets/getting-started",
     "title": "Getting Started",
     "contentPath": "./secrets/getting_started.md",
     "category": "Secrets"
