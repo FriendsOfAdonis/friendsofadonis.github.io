@@ -5,7 +5,7 @@
 You can retrieve a customer by their Stripe ID using the `shopkeeper.findBillable` method. This method will return an instance of the billable model:
 
 ```ts
-import shopkeeper from 'adonis-shopkeeper/services/shopkeeper'
+import shopkeeper from '@foadonis/shopkeeper/services/shopkeeper'
 
 const user = await shopkeeper.findBillable(stripeId)
 ```
@@ -80,7 +80,7 @@ for (const transaction of transactions) {
 
 ## Tax IDs
 
-Cashier offers an easy way to manage a customer's tax IDs. For example, the `taxIds` method may be used to retrieve all of the [tax IDs](https://stripe.com/docs/api/customer_tax_ids/object) that are assigned to a customer as a collection:
+Shopkeeper offers an easy way to manage a customer's tax IDs. For example, the `taxIds` method may be used to retrieve all of the [tax IDs](https://stripe.com/docs/api/customer_tax_ids/object) that are assigned to a customer as a collection:
 
 ```ts
 const taxIds = await user.taxIds()
@@ -98,7 +98,7 @@ You may create a new Tax ID by providing a valid [type](https://stripe.com/docs/
 const taxId = await user.createTaxId('eu_vat', 'BE0123456789')
 ```
 
-The `createTaxId` method will immediately add the VAT ID to the customer's account. [Verification of VAT IDs is also done by Stripe](https://stripe.com/docs/invoicing/customer/tax-ids#validation); however, this is an asynchronous process. You can be notified of verification updates by subscribing to the `customer.tax_id.updated` webhook event and inspecting [the VAT IDs `verification` parameter](https://stripe.com/docs/api/customer_tax_ids/object#tax_id_object-verification). For more information on handling webhooks, please consult the [documentation on defining webhook handlers](./handling-stripe-webhooks).
+The `createTaxId` method will immediately add the VAT ID to the customer's account. [Verification of VAT IDs is also done by Stripe](https://stripe.com/docs/invoicing/customer/tax-ids#validation); however, this is an asynchronous process. You can be notified of verification updates by subscribing to the `customer.tax_id.updated` webhook event and inspecting [the VAT IDs `verification` parameter](https://stripe.com/docs/api/customer_tax_ids/object#tax_id_object-verification). For more information on handling webhooks, please consult the [documentation on defining webhook handlers](./webhooks).
 
 You may delete a tax ID using the `deleteTaxId` method:
 
@@ -124,9 +124,9 @@ export default class User extends compose(BaseModel, Billable) {
 }
 ```
 
-Now, every time your customer model is updated, its information will be synced with Stripe. For convenience, Cashier will automatically sync your customer's information with Stripe on the initial creation of the customer.
+Now, every time your customer model is updated, its information will be synced with Stripe. For convenience, Shopkeeper will automatically sync your customer's information with Stripe on the initial creation of the customer.
 
-You may customize the columns used for syncing customer information to Stripe by overriding a variety of methods provided by Cashier. For example, you may override the `stripeName` method to customize the attribute that should be considered the customer's "name" when Cashier syncs customer information to Stripe:
+You may customize the columns used for syncing customer information to Stripe by overriding a variety of methods provided by Shopkeeper. For example, you may override the `stripeName` method to customize the attribute that should be considered the customer's "name" when Shopkeeper syncs customer information to Stripe:
 
 ```ts
 // title: app/models/user.ts

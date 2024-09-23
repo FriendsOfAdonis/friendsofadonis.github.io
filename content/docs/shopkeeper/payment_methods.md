@@ -6,7 +6,7 @@ In order to create subscriptions or perform "one-off" charges with Stripe, you w
 
 ### Payment Methods for Subscriptions
 
-When storing a customer's credit card information for future use by a subscription, the Stripe "Setup Intents" API must be used to securely gather the customer's payment method details. A "Setup Intent" indicates to Stripe the intention to charge a customer's payment method. Cashier's `Billable` trait includes the `createSetupIntent` method to easily create a new Setup Intent. You should invoke this method from the route or controller that will render the form which gathers your customer's payment method details:
+When storing a customer's credit card information for future use by a subscription, the Stripe "Setup Intents" API must be used to securely gather the customer's payment method details. A "Setup Intent" indicates to Stripe the intention to charge a customer's payment method. Shopkeeper's `Billable` trait includes the `createSetupIntent` method to easily create a new Setup Intent. You should invoke this method from the route or controller that will render the form which gathers your customer's payment method details:
 
 ```ts
 router.get('/update-payment-method', ({ auth, view }) => {
@@ -71,7 +71,7 @@ cardButton.addEventListener('click', async (e) => {
 });
 ```
 
-After the card has been verified by Stripe, you may pass the resulting `setupIntent.payment_method` identifier to your Laravel application, where it can be attached to the customer. The payment method can either be [added as a new payment method](#adding-payment-methods) or [used to update the default payment method](#updating-the-default-payment-method). You can also immediately use the payment method identifier to [create a new subscription](#creating-subscriptions).
+After the card has been verified by Stripe, you may pass the resulting `setupIntent.payment_method` identifier to your Adonis application, where it can be attached to the customer. The payment method can either be [added as a new payment method](#adding-payment-methods) or [used to update the default payment method](#updating-the-default-payment-method). You can also immediately use the payment method identifier to [create a new subscription](#creating-subscriptions).
 
 :::tip
 
@@ -130,11 +130,11 @@ cardButton.addEventListener('click', async (e) => {
 });
 ```
 
-If the card is verified successfully, you may pass the `paymentMethod.id` to your Laravel application and process a [single charge](#simple-charge).
+If the card is verified successfully, you may pass the `paymentMethod.id` to your Adonis application and process a [single charge](#simple-charge).
 
 ## Retrieving Payment Methods
 
-The `paymentMethods` method on the billable model instance returns a collection of `Laravel\Cashier\PaymentMethod` instances:
+The `paymentMethods` method on the billable model instance returns a list of Shopkeeper's `PaymentMethod` instances:
 
 ```ts
 const paymentMethods = await user.paymentMethods()

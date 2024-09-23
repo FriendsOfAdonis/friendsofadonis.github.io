@@ -36,6 +36,72 @@
     "category": "Shopkeeper"
   },
   {
+    "permalink": "shopkeeper/subscription-trials",
+    "title": "Subscription Trials",
+    "contentPath": "./shopkeeper/subscription_trials.md",
+    "category": "Shopkeeper"
+  },
+  {
+    "permalink": "shopkeeper/webhooks",
+    "title": "Stripe Webhooks",
+    "contentPath": "./shopkeeper/webhooks.md",
+    "category": "Shopkeeper"
+  },
+  {
+    "permalink": "shopkeeper/single-charges",
+    "title": "Subscription Trials",
+    "contentPath": "./shopkeeper/single_charges.md",
+    "category": "Shopkeeper"
+  },
+  {
+    "permalink": "shopkeeper/checkout",
+    "title": "Checkout",
+    "contentPath": "./shopkeeper/checkout.md",
+    "category": "Shopkeeper"
+  },
+  {
+    "permalink": "shopkeeper/invoices",
+    "title": "Invoices",
+    "contentPath": "./shopkeeper/invoices.md",
+    "category": "Shopkeeper"
+  },
+  {
+    "permalink": "shopkeeper/failed-payments",
+    "title": "Failed Payments",
+    "contentPath": "./shopkeeper/failed_payments.md",
+    "category": "Shopkeeper"
+  },
+  {
+    "permalink": "shopkeeper/sca",
+    "title": "SCA",
+    "contentPath": "./shopkeeper/sca.md",
+    "category": "Shopkeeper"
+  },
+  {
+    "permalink": "shopkeeper/stripe-sdk",
+    "title": "Stripe SDK",
+    "contentPath": "./shopkeeper/stripe_sdk.md",
+    "category": "Shopkeeper"
+  },
+  {
+    "permalink": "shopkeeper/testing",
+    "title": "Testing",
+    "contentPath": "./shopkeeper/testing.md",
+    "category": "Shopkeeper"
+  },
+  {
+    "permalink": "edgewire/getting-started",
+    "title": "Getting Started",
+    "contentPath": "./edgewire/getting_started.md",
+    "category": "Edgewire"
+  },
+  {
+    "permalink": "edgewire/components",
+    "title": "Components",
+    "contentPath": "./edgewire/components.md",
+    "category": "Edgewire"
+  },
+  {
     "permalink": "secrets/getting-started",
     "title": "Getting Started",
     "contentPath": "./secrets/getting_started.md",

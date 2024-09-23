@@ -4,7 +4,7 @@
 
 :::tip
 
-Before utilizing Stripe Checkout, you should define Products with fixed prices in your Stripe dashboard. In addition, you should [configure Shopkeeper's webhook handling](./handling-stripe-webhooks).
+Before utilizing Stripe Checkout, you should define Products with fixed prices in your Stripe dashboard. In addition, you should [configure Shopkeeper's webhook handling](./webhooks).
 
 :::
 
@@ -105,7 +105,7 @@ router.get('/checkout/success', async ({ auth, request response, view }) => {
 
 :::tip
 
-Before utilizing Stripe Checkout, you should define Products with fixed prices in your Stripe dashboard. In addition, you should [configure Shopkeeper's webhook handling](./handling-stripe-webhooks).
+Before utilizing Stripe Checkout, you should define Products with fixed prices in your Stripe dashboard. In addition, you should [configure Shopkeeper's webhook handling](./webhooks).
 
 :::
 
@@ -137,9 +137,9 @@ router.get('/subscription-checkout', async ({ auth, request response, view }) =>
 })
 ```
 
-As you can see in the example above, we will redirect the customer to a Stripe Checkout session which will allow them to subscribe to our Basic plan. After a successful checkout or cancellation, the customer will be redirected back to the URL we provided to the `checkout` method. To know when their subscription has actually started (since some payment methods require a few seconds to process), we'll also need to [configure Shopkeepers's webhook handling](./handling-stripe-webhooks).
+As you can see in the example above, we will redirect the customer to a Stripe Checkout session which will allow them to subscribe to our Basic plan. After a successful checkout or cancellation, the customer will be redirected back to the URL we provided to the `checkout` method. To know when their subscription has actually started (since some payment methods require a few seconds to process), we'll also need to [configure Shopkeepers's webhook handling](./webhooks).
 
-Now that customers can start subscriptions, we need to restrict certain portions of our application so that only subscribed users can access them. Of course, we can always determine a user's current subscription status via the `subscribed` method provided by Cashier's `Billable` trait:
+Now that customers can start subscriptions, we need to restrict certain portions of our application so that only subscribed users can access them. Of course, we can always determine a user's current subscription status via the `subscribed` method provided by Shopkeeper's `Billable` trait:
 
 ```edge
 @if(await auth.user.subscribed())
@@ -204,7 +204,7 @@ router.get('/dashboard').middleware(middleware.subscribed())
 
 Of course, customers may want to change their subscription plan to another product or "tier". The easiest way to allow this is by directing customers to Stripe's [Customer Billing Portal](https://stripe.com/docs/no-code/customer-portal), which provides a hosted user interface that allows customers to download invoices, update their payment method, and change subscription plans.
 
-First, define a link or button within your application that directs users to a Laravel route which we will utilize to initiate a Billing Portal session:
+First, define a link or button within your application that directs users to an Adonis route which we will utilize to initiate a Billing Portal session:
 
 ```edge
 <a href="{{ route('billing') }}">
@@ -230,6 +230,6 @@ router
 
 :::warning
 
-As long as you have configured Shopkeeper's webhook handling, Cashier will automatically keep your application's Shopkeeper-related database tables in sync by inspecting the incoming webhooks from Stripe. So, for example, when a user cancels their subscription via Stripe's Customer Billing Portal, Shopkeeper will receive the corresponding webhook and mark the subscription as "canceled" in your application's database.
+As long as you have configured Shopkeeper's webhook handling, Shopkeeper will automatically keep your application's Shopkeeper-related database tables in sync by inspecting the incoming webhooks from Stripe. So, for example, when a user cancels their subscription via Stripe's Customer Billing Portal, Shopkeeper will receive the corresponding webhook and mark the subscription as "canceled" in your application's database.
 
 :::

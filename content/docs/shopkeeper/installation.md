@@ -10,7 +10,7 @@ node ace add @foadonis/shopkeeper
 
 :::disclosure{title="See steps performed by the add command"}
 
-1. Installs the `adonis-shopkeeper` package using the detected package manager.
+1. Installs the `@foadonis/shopkeeper` package using the detected package manager.
 
 2. Registers the following service provider inside the `adonisrc.ts` file.
 
@@ -18,12 +18,12 @@ node ace add @foadonis/shopkeeper
     {
       providers: [
         // ...other providers
-        () => import('adonis-shopkeeper/providers/shopkeeper')
+        () => import('@foadonis/shopkeeper/providers/shopkeeper')
       ]
     }
     ```
 
-3. Create the `config/shopkeeper.ts` file. This file contains the configuration settings for selected OAuth providers.
+3. Creates the `config/shopkeeper.ts` file.
 
 4. Defines the environment variables to store `STRIPE_KEY`, `STRIPE_SECRET` and `STRIPE_WEBHOOK_SECRET`.
 
@@ -39,7 +39,7 @@ node ace migration:run
 
 Shopkeeper's migrations will add several columns to your `users` table. They will also create a new `subscriptions` table to hold all of your customer's subscriptions and a subscription_items table for subscriptions with multiple prices.
 
-Lastly, to ensure Shopkeeper properly handles all Stripe events, remember to [configure Cashier's webhook handling](./webhook).
+Lastly, to ensure Shopkeeper properly handles all Stripe events, remember to [configure Shopkeeper's webhook handling](./webhooks).
 
 ## Configuration
 
@@ -51,7 +51,7 @@ Before using Shopkeeper, add the `Billable` mixin to your billable model definit
 // title: app/models/user.ts
 import { compose } from '@adonisjs/core/helpers'
 import { BaseModel } from '@adonisjs/lucid/orm'
-import { Billable } from 'adonis-shopkeeper/mixins'
+import { Billable } from '@foadonis/shopkeeper/mixins'
 
 export default class User extends compose(BaseModel, Billable) {}
 ```
@@ -60,7 +60,7 @@ In your Shopkeeper configuration file, define your User as the Customer model:
 
 ```ts
 // title: config/shopkeeper.ts
-import { defineConfig } from 'adonis-shopkeeper'
+import { defineConfig } from '@foadonis/shopkeeper'
 
 export default defineConfig({
   customerModel: () => import('#models/user')
@@ -99,11 +99,11 @@ The default Shopkeeper currency is United States Dollars (USD). You can change t
 SHOPKEEPER_CURRENCY=eur
 ```
 
-In addition to configuring Cashier's currency, you may also specify a locale to be used when formatting money values for display on invoices. Internally, Cashier utilizes [`Intl.NumberFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) to set the currency locale:
+In addition to configuring Shopkeeper's currency, you may also specify a locale to be used when formatting money values for display on invoices. Internally, Shopkeeper utilizes [`Intl.NumberFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) to set the currency locale:
 
 ```ini
 // title: .env
-SHOPKEEPER_CURRENCY_LOCALE=nl_BE
+SHOPKEEPER_CURRENCY_LOCALE=de-DE
 ```
 
 ### Tax Configuration
@@ -112,7 +112,7 @@ Thanks to [Stripe Tax](https://stripe.com/tax), it's possible to automatically c
 
 ```ts
 // title: config/shopkeeper.ts
-import { defineConfig } from 'adonis-shopkeeper'
+import { defineConfig } from '@foadonis/shopkeeper'
 
 export default defineConfig({
   calculateTaxes: true
@@ -130,7 +130,7 @@ You are free to extend the models used internally by Shopkeeper by defining your
 
 ```ts
 // title: app/models/user.ts
-import { Subscription as ShopkeeperSubscription } from 'adonis-shopkeeper/models'
+import { Subscription as ShopkeeperSubscription } from '@foadonis/shopkeeper/models'
 
 export default class Subscription extends ShopkeeperSubscription {
   // ...
@@ -141,7 +141,7 @@ After defining your model, you may instruct Shopkeeper to use your custom model 
 
 ```ts
 // title: config/shopkeeper.ts
-import { defineConfig } from 'adonis-shopkeeper'
+import { defineConfig } from '@foadonis/shopkeeper'
 
 export default defineConfig({
   subscriptionModel: () => import('#models/subscription')

@@ -153,11 +153,11 @@ await user.newSubscription('default', 'price_monthly').add()
 
 ### Creating Subscriptions From the Stripe Dashboard
 
-You may also create subscriptions from the Stripe dashboard itself. When doing so, Cashier will sync newly added subscriptions and assign them a type of `default`. To customize the subscription type that is assigned to dashboard created subscriptions, [define webhook event handlers](./defining-webhook-event-handlers).
+You may also create subscriptions from the Stripe dashboard itself. When doing so, Shopkeeper will sync newly added subscriptions and assign them a type of `default`. To customize the subscription type that is assigned to dashboard created subscriptions, [define webhook event handlers](./defining-webhook-event-handlers).
 
 In addition, you may only create one type of subscription via the Stripe dashboard. If your application offers multiple subscriptions that use different types, only one type of subscription may be added through the Stripe dashboard.
 
-Finally, you should always make sure to only add one active subscription per type of subscription offered by your application. If a customer has two `default` subscriptions, only the most recently added subscription will be used by Cashier even though both would be synced with your application's database.
+Finally, you should always make sure to only add one active subscription per type of subscription offered by your application. If a customer has two `default` subscriptions, only the most recently added subscription will be used by Shopkeeper even though both would be synced with your application's database.
 
 ## Checking Subscription Status
 
@@ -269,7 +269,7 @@ if (subscription.ended()) {
 
 ### Incomplete and Past Due Status
 
-If a subscription requires a secondary payment action after creation the subscription will be marked as `incomplete`. Subscription statuses are stored in the `stripe_status` column of Cashier's `subscriptions` database table.
+If a subscription requires a secondary payment action after creation the subscription will be marked as `incomplete`. Subscription statuses are stored in the `stripe_status` column of Shopkeeper's `subscriptions` database table.
 
 Similarly, if a secondary payment action is required when swapping prices the subscription will be marked as `past_due`. When your subscription is in either of these states it will not be active until the customer has confirmed their payment. Determining if a subscription has an incomplete payment may be accomplished using the `hasIncompletePayment` method on the billable model or a subscription instance:
 
@@ -296,7 +296,7 @@ If you would like the subscription to still be considered active when it's in a 
 
 ```ts
 // title: config/shopkeeper.ts
-import { defineConfig } from 'adonis-shopkeeper'
+import { defineConfig } from '@foadonis/shopkeeper'
 
 export default defineConfig({
   keepPastDueSubscriptionsActive: true,
@@ -568,6 +568,7 @@ Stripe allows your customers to have multiple subscriptions simultaneously. For 
 When your application creates subscriptions, you may provide the type of the subscription to the `newSubscription` method. The type may be any string that represents the type of subscription the user is initiating:
 
 ```ts
+// title: start/routes.ts
 import router from '@adonisjs/core/services/router'
 
 router.get('/swimming/subscribe', async ({ auth, request }) => {
@@ -581,3 +582,264 @@ router.get('/swimming/subscribe', async ({ auth, request }) => {
   // ...
 })
 ```
+
+In this example, we initiated a monthly swimming subscription for the customer. However, they may want to swap to a yearly subscription at a later time. When adjusting the customer's subscription, we can simply swap the price on the `swimming` subscription:
+
+```ts
+await user.subscription('swimming').swap('price_swimming_monthly')
+```
+
+Of course, you may also cancel the subscription entirely:
+
+```ts
+await user.subscription('swimming').cancel()
+```
+
+## Metered Billing
+
+[Metered billing](https://stripe.com/docs/billing/subscriptions/metered-billing) allows you to charge customers based on their product usage during a billing cycle. For example, you may charge customers based on the number of text messages or emails they send per month.
+
+To start using metered billing, you will first need to create a new product in your Stripe dashboard with a metered price. Then, use the `meteredPrice` to add the metered price ID to a customer subscription:
+
+```ts
+// file: start/routes.ts
+import router from '@adonisjs/core/services/router'
+
+router.get('/user/subscribe', async ({ auth, request }) => {
+  const user = auth.getUserOrFail()
+  const paymentMethodId = request.get('paymentMethodId')
+
+  await user.newSubscription()
+    .meteredPrice('price_metered')
+    .create(paymentMethodId)
+
+  // ...
+})
+```
+
+You may also start a metered subscription via [Stripe Checkout](#checkout):
+
+```ts
+// file: start/routes.ts
+import router from '@adonisjs/core/services/router'
+
+router.get('/user/subscribe', async ({ auth, request, view }) => {
+  const user = auth.getUserOrFail()
+  const paymentMethodId = request.get('paymentMethodId')
+
+  const checkout = await user.newSubscription()
+    .meteredPrice('price_metered')
+    .checkout(paymentMethodId)
+
+  return view.render('pages/checkout', {
+    checkout
+  })
+})
+```
+
+### Reporting Usage
+
+As your customer uses your application, you will report their usage to Stripe so that they can be billed accurately. To increment the usage of a metered subscription, you may use the `reportUsage` method:
+
+```ts
+await user.subscription().reportUsage()
+```
+
+By default, a "usage quantity" of 1 is added to the billing period. Alternatively, you may pass a specific amount of "usage" to add to the customer's usage for the billing period:
+
+```ts
+await user.subscription().reportUsage(15)
+```
+
+If your application offers multiple prices on a single subscription, you will need to use the `reportUsageFor` method to specify the metered price you want to report usage for:
+
+```ts
+await user.subscription().reportUsageFor('price_metered', 15)
+```
+
+Sometimes, you may need to update usage which you have previously reported. To accomplish this, you may pass a timestamp or a `DateTimeInterface` instance as the second parameter to `reportUsage`. When doing so, Stripe will update the usage that was reported at that given time. You can continue to update previous usage records as the given date and time is still within the current billing period:
+
+```ts
+await user.subscription().reportUsage(15, timestamp)
+```
+
+### Retrieving Usage Records
+
+To retrieve a customer's past usage, you may use a subscription instance's `usageRecords` method:
+
+```ts
+const subscription = await user.subscription('default')
+const usageRecords = await subscription.usageRecords()
+```
+
+If your application offers multiple prices on a single subscription, you may use the `usageRecordsFor` method to specify the metered price that you wish to retrieve usage records for:
+
+```ts
+const subscription = await user.subscription('default')
+const usageRecords = await subscription.usageRecordsFor('price_metered')
+```
+
+The `usageRecords` and `usageRecordsFor` methods return a Collection instance containing an associative array of usage records. You may iterate over this array to display a customer's total usage:
+
+```html
+@each(usageRecord in usageRecords)
+  - Period Starting: {{ usageRecord.period.start }}
+  - Period Ending: {{ usageRecord.period.end }}
+  - Total Usage: {{ usageRecord.total_usage }}
+@end
+```
+
+For a full reference of all usage data returned and how to use Stripe's cursor based pagination, please consult [the official Stripe API documentation](https://stripe.com/docs/api/usage_records/subscription_item_summary_list).
+
+## Subscription Taxes
+
+:::warning
+
+Instead of calculating Tax Rates manually, you can [automatically calculate taxes using Stripe Tax](./installation#tax-configuration)
+
+:::
+
+To specify the tax rates a user pays on a subscription, you should implement the `taxRates` method on your billable model and return an array containing the Stripe tax rate IDs. You can define these tax rates in [your Stripe dashboard](https://dashboard.stripe.com/test/tax-rates):
+
+```ts
+// title: models/user.ts
+import { compose } from '@adonisjs/core/helpers'
+import { BaseModel } from '@adonisjs/lucid/orm'
+import { Billable } from '@foadonis/shopkeeper/mixins'
+
+export default class User extends compose(BaseModel, Billable) {
+  taxRates(): string[] {
+    return ['txr_id']
+  }
+}
+```
+
+The `taxRates` method enables you to apply a tax rate on a customer-by-customer basis, which may be helpful for a user base that spans multiple countries and tax rates.
+
+If you're offering subscriptions with multiple products, you may define different tax rates for each price by implementing a `priceTaxRates` method on your billable model:
+
+```ts
+// title: models/user.ts
+import { compose } from '@adonisjs/core/helpers'
+import { BaseModel } from '@adonisjs/lucid/orm'
+import { Billable } from '@foadonis/shopkeeper/mixins'
+
+export default class User extends compose(BaseModel, Billable) {
+  priceTaxRates(): Record<string, string[]> {
+    return {
+      price_monthly: ['txr_id']
+    }
+  }
+}
+```
+
+:::warning
+
+The `taxRates` method only applies to subscription charges. If you use Shopkeeper to make "one-off" charges, you will need to manually specify the tax rate at that time.
+
+:::
+
+### Syncing Tax Rates
+
+Shopkeeper also offers the `isNotTaxExempt`, `isTaxExempt`, and `reverseChargeApplies` methods to determine if the customer is tax exempt. These methods will call the Stripe API to determine a customer's tax exemption status:
+
+```ts
+await user.isTaxExempt()
+await user.isNotTaxExempt()
+await user.reverseChargeApplies()
+```
+
+:::warning
+
+These methods are also available on any `Invoice` object. However, when invoked on an `Invoice` object, the methods will determine the exemption status at the time the invoice was created.
+
+:::
+
+## Subscription Anchor Date
+
+By default, the billing cycle anchor is the date the subscription was created or, if a trial period is used, the date that the trial ends. If you would like to modify the billing anchor date, you may use the `anchorBillingCycleOn` method:
+
+```ts
+// file: start/routes.ts
+import router from '@adonisjs/core/services/router'
+import { DateTime } from 'luxon'
+
+router.get('/user/subscribe', async ({ auth, request, view }) => {
+  const user = auth.getUserOrFail()
+  const paymentMethodId = request.get('paymentMethodId')
+
+  await user.newSubscription('default', 'price_monthly')
+    .anchorBillingCycleOn(DateTime.now().plus({ days: 5 }))
+    .checkout(paymentMethodId)
+
+  // ...
+})
+```
+
+For more information on managing subscription billing cycles, consult the [Stripe billing cycle documentation](https://stripe.com/docs/billing/subscriptions/billing-cycle)
+
+## Cancelling Subscriptions
+
+To cancel a subscription, call the `cancel` method on the user's subscription:
+
+```ts
+const subscription = await user.subscription('default')
+await user.cancel()
+```
+
+When a subscription is canceled, Shopkeeper will automatically set the `ends_at` column in your `subscriptions` database table. This column is used to know when the `subscribed` method should begin returning `false`.
+
+For example, if a customer cancels a subscription on March 1st, but the subscription was not scheduled to end until March 5th, the `subscribed` method will continue to return `true` until March 5th. This is done because a user is typically allowed to continue using an application until the end of their billing cycle.
+
+You may determine if a user has canceled their subscription but are still on their "grace period" using the `onGracePeriod` method:
+
+```ts
+const subscription = await user.subscription('default')
+if (subscription.onGracePeriod()) {
+  // ...
+}
+```
+
+If you wish to cancel a subscription immediately, call the `cancelNow` method on the user's subscription:
+
+```ts
+const subscription = await user.subscription('default')
+await subscription.cancelNow()
+```
+
+If you wish to cancel a subscription immediately and invoice any remaining un-invoiced metered usage or new / pending proration invoice items, call the `cancelNowAndInvoice` method on the user's subscription:
+
+```ts
+const subscription = await user.subscription('default')
+await subscription.cancelNowAndInvoice()
+```
+
+You may also choose to cancel the subscription at a specific moment in time:
+
+```ts
+const subscription = await user.subscription('default')
+await subscription.cancelAt(
+  DateTime.now().plus({ days: 5 })
+)
+```
+
+Finally, you should always cancel user subscriptions before deleting the associated user model:
+
+```ts
+const subscription = await user.subscription('default')
+
+await subscription.cancelNow()
+await user.delete()
+```
+
+## Resuming Subscriptions
+
+If a customer has canceled their subscription and you wish to resume it, you may invoke the `resume` method on the subscription. The customer must still be within their "grace period" in order to resume a subscription:
+
+```ts
+const subscription = await user.subscription('default')
+
+await subscription.resume()
+```
+
+If the customer cancels a subscription and then resumes that subscription before the subscription has fully expired the customer will not be billed immediately. Instead, their subscription will be re-activated and they will be billed on the original billing cycle.
