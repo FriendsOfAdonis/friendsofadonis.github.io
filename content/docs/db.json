@@ -49,7 +49,7 @@
   },
   {
     "permalink": "shopkeeper/single-charges",
-    "title": "Subscription Trials",
+    "title": "Single Charges",
     "contentPath": "./shopkeeper/single_charges.md",
     "category": "Shopkeeper"
   },
@@ -90,16 +90,22 @@
     "category": "Shopkeeper"
   },
   {
-    "permalink": "edgewire/getting-started",
-    "title": "Getting Started",
-    "contentPath": "./edgewire/getting_started.md",
-    "category": "Edgewire"
+    "permalink": "magnify/introduction",
+    "title": "Introduction",
+    "contentPath": "./magnify/introduction.md",
+    "category": "Magnify"
   },
   {
-    "permalink": "edgewire/components",
-    "title": "Components",
-    "contentPath": "./edgewire/components.md",
-    "category": "Edgewire"
+    "permalink": "magnify/gettings-started",
+    "title": "Getting Started",
+    "contentPath": "./magnify/getting_started.md",
+    "category": "Magnify"
+  },
+  {
+    "permalink": "magnify/advanced",
+    "title": "Advanced",
+    "contentPath": "./magnify/advanced.md",
+    "category": "Magnify"
   },
   {
     "permalink": "secrets/getting-started",
